@@ -30,7 +30,7 @@ jobs:
               run: |
                 pip install flake8 black
                 black . --check
-                flake8 .
+                flake8 . --count --max-line-length=88 --extend-ignore=E203,E302 --statistics
 
             - name: Run tests
               # A single command, therefore no '|'

@@ -1,6 +1,9 @@
 import requests
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed # Designed to run multiple concurrent tests
+from concurrent.futures import (
+    ThreadPoolExecutor,
+    as_completed,
+)  # Designed to run multiple concurrent tests
 
 """
    This is a script to test how my API performs (latency) under concurrent requests
@@ -14,6 +17,7 @@ CONCURRENCY = 50  # start small
 
 latencies = []
 
+
 def send_request():
 
     start = time.time()
@@ -24,8 +28,9 @@ def send_request():
     if response.status_code == 200:
 
         # Return the total time, in Ms
-        return (end-start) * 1000
+        return (end - start) * 1000
     return None
+
 
 # Always deal with 10 requests at a time
 with ThreadPoolExecutor(max_workers=CONCURRENCY) as executor:
@@ -44,18 +49,20 @@ with ThreadPoolExecutor(max_workers=CONCURRENCY) as executor:
         if result is not None:
             latencies.append(result)
 
-#-----------------
+# -----------------
 # PERCENTILES
-#------------------------
+# ------------------------
 
 # Sort from low to high, for percentile selection
 latencies.sort()
 
+
 def percentile(data, p):
-    k = int(len(data) * (p/100))
+    k = int(len(data) * (p / 100))
 
     # Prevent out of bounds errors
-    return data[min(k, len(data) -1)]
+    return data[min(k, len(data) - 1)]
+
 
 p50 = percentile(latencies, 50)
 p95 = percentile(latencies, 95)

@@ -26,8 +26,10 @@ jobs:
                 pip install -r requirements.txt  
             
             - name: Run lint
+              # Black tidies up the code, flake8 checks for style and errors
               run: |
-                pip install flake8
+                pip install flake8 black
+                black . --check
                 flake8 .
 
             - name: Run tests

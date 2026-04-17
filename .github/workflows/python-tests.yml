@@ -39,3 +39,18 @@ jobs:
             - name: Build Docker image
               run: |
                 docker build -t my-app:latest .
+
+            - name: Log in to Docker Hub
+              # echo is a shell script like f"
+              # ( | ) Tells the terminal to take the output of the echo command
+              # stdin passes from the outside to the inside
+                                                          # ( -u )Login as user
+              run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+            - name: Tag image
+              run: |  # Rename to docker_username/my-app:latest
+                docker tag my-app:latest ${{ secrets.DOCKER_USERNAME }}/my-app:latest
+
+            - name: Push image
+              run: |
+                docker push ${{ secrets.DOCKER_USERNAME }}/my-app:latest

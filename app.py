@@ -55,4 +55,5 @@ def predict(data: Input):
     result = model_predict(data.value)
     return {"prediction": result}
 
+
 print("CI run")

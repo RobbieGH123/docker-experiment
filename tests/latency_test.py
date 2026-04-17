@@ -1,6 +1,5 @@
 import requests
 import time
-import statistics
 
 URL = "http://127.0.0.1:8000/predict"
 NUM_REQUESTS = 500

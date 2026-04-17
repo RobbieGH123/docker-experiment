@@ -41,6 +41,12 @@ jobs:
                 docker build -t my-app:latest .
                 echo "Pushing image test"
 
+            - name: Set version
+              # Create a commit hash, limit to 7 characters
+              # >> append to file $GITHUB_ENV, 
+              # Survives through subsequent steps
+              run: echo "VERSION=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
             - name: Log in to Docker Hub
               # echo is a shell script like f"
               # ( | ) Tells the terminal to take the output of the echo command
@@ -48,10 +54,12 @@ jobs:
                                                           # ( -u )Login as user
               run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-            - name: Tag image
+            - name: Tag image  # Tags don't overwrite the original reference
               run: |  # Rename to docker_username/my-app:latest
                 docker tag my-app:latest ${{ secrets.DOCKER_USERNAME }}/my-app:latest
+                docker tag my-app:latest ${{ secrets.DOCKER_USERNAME }}/my-app:${{ env.VERSION }}
 
             - name: Push image
               run: |
                 docker push ${{ secrets.DOCKER_USERNAME }}/my-app:latest
+                docker push ${{ secrets.DOCKER_USERNAME }}/my-app:${{ env.VERSION }}

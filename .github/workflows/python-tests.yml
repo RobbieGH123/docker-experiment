@@ -1,24 +1,39 @@
+# Label for GitHub UI
 name: Run Python Tests
 
+# Defines the 'triggers'
 on: [push, pull_request]
 
+# The start of the work, a workflow can have multiple
 jobs:
-    test:
-        runs-on: ubuntu-latest
+    test:  # Custom ID for this job
+        runs-on: ubuntu-latest  # Defines the environment for the job
 
+        # The individual taks that happen in order
         steps:
-            - name: Check out code
-              uses: actions/checkout@v4
+            - name: Check out code  # Describes this specific step
+              # 'uses' a pre-made action from the marketplace
+              uses: actions/checkout@v4  # Copy the repo files onto the VM
 
             - name: Set up Python
               uses: actions/setup-python@v5
-              with:
+              with:  # 'with' is used to pass extra info to a 'uses' action
                     python-version: '3.10'
 
             - name: Install dependencies
-              run: |
+              run: |  # Run is used to execute commands in the terminal, '|' allows for multiple lines
                 python -m pip install --upgrade pip  
                 pip install -r requirements.txt  
+            
+            - name: Run lint
+              run: |
+                pip install flake8
+                flake8 .
 
             - name: Run tests
+              # A single command, therefore no '|'
               run: python -m pytest tests/test_predict.py
+
+            - name: Build Docker image
+              run: |
+                docker build -t my-app:latest .

@@ -27,7 +27,7 @@ jobs:
             
             - name: Run lint
               # Black tidies up the code, flake8 checks for style and errors
-              run: |
+              run: |  # --check makes sure errors are not fixed here
                 pip install flake8 black
                 black . --check
                 flake8 . --count --max-line-length=88 --extend-ignore=E203,E302 --statistics
@@ -39,6 +39,7 @@ jobs:
             - name: Build Docker image
               run: |
                 docker build -t my-app:latest .
+                echo "Pushing image test"
 
             - name: Log in to Docker Hub
               # echo is a shell script like f"

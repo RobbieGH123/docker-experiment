@@ -35,7 +35,7 @@ formatter = JsonFormatter()  # Instantiate a JSON formatter
 handler.setFormatter(formatter)  # Attach the formatter to the handler
 
 logger.addHandler(handler)  # Register the handler with the root logger
-logger.setLevel(logging.INFO)  #  Set the minimum logging level to INFO
+logger.setLevel(logging.INFO)  # Set the minimum logging level to INFO
 
 # ────────────────────────────────
 # PROMETHEUS METRICS
